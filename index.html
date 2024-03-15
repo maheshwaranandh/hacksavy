@@ -21,11 +21,7 @@
         <div class="form-container sign-up-container">
             <form action="#">
                 <h1>Create Account</h1>
-                <div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-                </div>
+
                 <span>or use your email for registration</span>
                 <input type="text" placeholder="Name" />
                 <input type="email" placeholder="Email" id="upmail" />
@@ -37,11 +33,7 @@
         <div class="form-container sign-in-container">
             <form action="#">
                 <h1>Sign in</h1>
-                <div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-                </div>
+
                 <span>or use your account</span>
                 <input type="email" placeholder="Email" id="inmail" />
                 <!-- Replace password input with grid authentication -->
@@ -66,47 +58,7 @@
         </div>
     </div>
     <script src="main.js"></script>
-    <script>
-        // Your JavaScript code goes here
-        const upGrid = document.getElementById('upGrid');
-        const inGrid = document.getElementById('inGrid');
 
-        // Function to create image grid
-        function createImageGrid(grid, folder) {
-            grid.innerHTML = '';
-            const shuffledImageOrder = shuffleArray(Array.from({ length: 25 }, (_, i) => i + 1));
-            for (let i = 0; i < 25; i++) {
-                const img = document.createElement('img');
-                img.src = `images/${folder}/image/${shuffledImageOrder[i]}.jpg`;
-                img.alt = `Image ${shuffledImageOrder[i]}`;
-                img.classList.add('grid-item');
-                img.addEventListener('click', () => handleImageSelection(img, grid.id));
-                grid.appendChild(img);
-            }
-        }
-
-        // Function to handle image selection
-        function handleImageSelection(img, gridId) {
-            const grid = document.getElementById(gridId);
-            const selectedImages = grid.querySelectorAll('.selected');
-            if (selectedImages.length < maxPasswordLength) {
-                img.classList.toggle('selected');
-            }
-        }
-
-        // Function to shuffle array
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
-        // Initialize grids with images from folder1
-        createImageGrid(upGrid, 'folder1');
-        createImageGrid(inGrid, 'folder1');
-    </script>
 </body>
 
 </html>

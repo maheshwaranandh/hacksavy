@@ -112,7 +112,7 @@ function NewTab() {
          grid.appendChild(img);
      }
  }
-
+ const maxPasswordLength = 4; 
  // Function to handle image selection
  function handleImageSelection(img, gridId) {
      const grid = document.getElementById(gridId);

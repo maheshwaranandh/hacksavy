@@ -62,9 +62,8 @@ input{
 			0 10px 10px rgba(0,0,0,0.22);
     position: relative;
     overflow: hidden;
-    width: 768px;
-    max-width: 100%;
-    min-height: 480px;
+    height: 90%;
+    width: 90%;
 }
 
 .form-container form {
@@ -272,30 +271,9 @@ button.ghost{
     margin-top: 15px;
 }
 
+
+
 .grid-container {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    width: 80%;
-    margin: auto;
-    padding: 20px;
-}
-
-.grid-item {
-    width: 100%;
-    height: 0;
-    padding-bottom: 100%;
-    cursor: pointer;
-    overflow: hidden;
-}
-
-.grid-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.password-grid-container {
     display: grid;
     grid-template-columns: auto auto auto auto auto;
     gap: 10px;
@@ -304,13 +282,18 @@ button.ghost{
     padding: 20px;
 }
 
-.password-grid-item {
-    width: 60px;
-    height: 60px;
+.grid-item {
+    width: 70px;
+    height: 70px;
     cursor: pointer;
+    border: 2px solid transparent; /* Initially transparent border */
 }
 
-.password-grid-item img {
+.grid-item:hover {
+    border-color: #ff4b2b; /* Change border color on hover */
+}
+
+.grid-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
