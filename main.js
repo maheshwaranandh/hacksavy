@@ -13,41 +13,9 @@ signInButton.addEventListener('click', () => {
     container.classList.remove('right-panel-active');
 });
 // adding and removing border
-function upimg(element) {
-    var Image = element.querySelector('img');
-    if (Image) {
-        if (Image.classList.contains('clicked')) {
-            Image.classList.remove('clicked');
-            uppass.splice(uppass.indexOf(element.id), 1);
-            // console.log(element.id);
-            // console.log(uppass);
-        }
-        else {
-            Image.classList.add('clicked');
-            uppass.push(element.id);
-            // console.log(element.id);
-            // console.log(uppass);
-        }
-    }
-}
 
-function inimg(element) {
-    var Image = element.querySelector('img');
-    if (Image) {
-        if (Image.classList.contains('clicked')) {
-            Image.classList.remove('clicked');
-            inpass.splice(inpass.indexOf(element.id), 1);
-            // console.log(element.id);
-            // console.log(inpass);
-        }
-        else {
-            Image.classList.add('clicked');
-            inpass.push(element.id);
-            // console.log(element.id);
-            // console.log(inpass);
-        }
-    }
-}
+
+
 // element image recognition
 function signup() {
     sessionStorage.setItem("upname", document.getElementById('upmail').value);
@@ -101,26 +69,82 @@ function NewTab() {
 
  // Function to create image grid
  function createImageGrid(grid, folder) {
-     grid.innerHTML = '';
-     const shuffledImageOrder = shuffleArray(Array.from({ length: 25 }, (_, i) => i + 1));
-     for (let i = 0; i < 25; i++) {
-         const img = document.createElement('img');
-         img.src = `images/${folder}/image/${shuffledImageOrder[i]}.jpg`;
-         img.alt = `Image ${shuffledImageOrder[i]}`;
-         img.classList.add('grid-item');
-         img.addEventListener('click', () => handleImageSelection(img, grid.id));
-         grid.appendChild(img);
-     }
- }
- const maxPasswordLength = 4; 
- // Function to handle image selection
- function handleImageSelection(img, gridId) {
-     const grid = document.getElementById(gridId);
-     const selectedImages = grid.querySelectorAll('.selected');
-     if (selectedImages.length < maxPasswordLength) {
-         img.classList.toggle('selected');
-     }
- }
+    console.log("Current Folder:", folder); // Add this line to log the current folder
+    grid.innerHTML = '';
+    const shuffledImageOrder = shuffleArray(Array.from({ length: 25 }, (_, i) => i + 1));
+    for (let i = 0; i < 25; i++) {
+        const img = document.createElement('img');
+        img.src = `images/${folder}/image/${shuffledImageOrder[i]}.jpg`;
+        img.alt = `Image ${shuffledImageOrder[i]}`;
+        img.classList.add('grid-item');
+        img.addEventListener('click', () => handleImageSelection(img, grid.id, folder));
+        grid.appendChild(img);
+    }
+}
+
+ const maxPasswordLength = 4;
+
+
+ function handleImageSelection(img, gridId, folder) {
+    const grid = document.getElementById(gridId);
+    const maxPasswordLength = 4; 
+    const selectedImages = Array.from(grid.querySelectorAll('.selected'));
+
+    // Toggle the 'selected' class on the clicked image
+    img.classList.toggle('selected');
+
+    // Update the selectedImages array after toggling the class
+    const updatedSelectedImages = Array.from(grid.querySelectorAll('.selected'));
+    console.log("Selected Images:", updatedSelectedImages);
+
+    // Store the clicked image in session
+    const imageName = img.alt;
+    const sessionKey = `image${updatedSelectedImages.length}`;
+    sessionStorage.setItem(sessionKey, imageName);
+
+    // If max password length is reached, console log the created password array and return
+    if (updatedSelectedImages.length === maxPasswordLength) {
+        const password = updatedSelectedImages.map(img => img.alt);
+        console.log("Password Array:", password);
+        sessionStorage.setItem("password", JSON.stringify(password)); // Store password array in session storage
+        console.log("Password stored in session storage:", sessionStorage.getItem("password"));
+        return;
+    }
+
+    // Check if the next folder should be loaded
+    if (updatedSelectedImages.length < maxPasswordLength) {
+        setTimeout(() => {
+            console.log("Change Folder");
+            const nextFolder = getNextFolder(folder);
+            createImageGrid(grid, nextFolder);
+        }, 250); // Adjust the delay as needed
+    }
+
+    // If the selectedImages length exceeds maxPasswordLength, remove the selected class to prevent further selection
+    if (updatedSelectedImages.length > maxPasswordLength) {
+        img.classList.remove('selected');
+    }
+}
+
+
+
+
+
+
+
+
+
+// Function to get the next folder name
+function getNextFolder(currentFolder) {
+    const folders = [];
+    for (let i = 1; i <= maxPasswordLength; i++) {
+        folders.push(`folder${i}`);
+    }
+    const currentIndex = folders.indexOf(currentFolder);
+    const nextIndex = (currentIndex + 1) % folders.length;
+    return folders[nextIndex];
+}
+
 
  // Function to shuffle array
  function shuffleArray(array) {
