@@ -1,76 +1,64 @@
+// Get DOM elements
 const signUpButton = document.getElementById('signUp');
 const signInButton = document.getElementById('signIn');
 const container = document.getElementById('container');
+const upGrid = document.getElementById('upGrid');
+const inGrid = document.getElementById('inGrid');
+
+// Initialize variables
 let uppass = [];
 let inpass = [];
-let iteration=1;
+let iteration = 1;
 let selectedImagesUp = []; // Store selected images during signup
 let selectedImagesIn = [];
+
+// Event listeners for sign up and sign in buttons
 signUpButton.addEventListener('click', () => {
     container.classList.add('right-panel-active');
 });
-
 
 signInButton.addEventListener('click', () => {
     container.classList.remove('right-panel-active');
 });
 
-// Element image recognition
+// Function to handle sign up process
 function signup() {
+    // Store email and selected images in session during sign up
     sessionStorage.setItem("upname", document.getElementById('upmail').value);
-    sessionStorage.setItem("uppass", JSON.stringify(selectedImagesUp)); // Store selected images in session
-    var myText = "Account Created Successfully";
-    alert(myText);
+    sessionStorage.setItem("uppass", JSON.stringify(selectedImagesUp));
+    alert("Account Created Successfully");
 }
 
-// Image pattern authentication
-var v2 = new Boolean(false);
+// Function to handle sign in process
 function signin() {
     let str = document.getElementById('inmail').value;
-    let array = JSON.parse(sessionStorage.getItem("uppass")); // Retrieve stored array during signin
-    let check1 = JSON.stringify(selectedImagesIn) === JSON.stringify(array); // Compare arrays
-    console.log(JSON.stringify(selectedImagesIn));
-    console.log(JSON.stringify(array));
+    let array = JSON.parse(sessionStorage.getItem("uppass"));
+    let check1 = JSON.stringify(selectedImagesIn) === JSON.stringify(array);
     if (check1) {
-        var myText = "Login is successful";
-        alert(myText);
+        alert("Login is successful");
         NewTab();
-    }
-    else {
-        var myText = "Login Failed";
-        alert(myText);
+    } else {
+        alert("Login Failed");
         sendMail3();
     }
 }
 
-function sendMail3(){
+// Function to send mail
+function sendMail3() {
     emailjs.send('service_7q1sn6s', 'template_v7f98gs')
-    .then(function(res){
-        // console.log("Success", res.status);
-        alert("mail sent successfully");
-    })
+        .then(function (res) {
+            alert("Mail sent successfully");
+        });
 }
 
-function sendMail2(){
-    emailjs.send('service_7q1sn6s', 'template_ogw30ms')
-    .then(function(res){
-        // console.log("Success", res.status);
-        alert("mail sent successfully");
-    })
-}
-
+// Function to open a new tab
 function NewTab() {
-    window.open(
-      "https://stjosephs.ac.in/index.html", "_blank");
+    window.open("https://stjosephs.ac.in/index.html", "_blank");
 }
-
-// Your JavaScript code goes here
-const upGrid = document.getElementById('upGrid');
-const inGrid = document.getElementById('inGrid');
 
 // Function to create image grid
-function createImageGrid(grid, folder,upOrin) {
-    console.log("Current Folder:", folder); // Add this line to log the current folder
+function createImageGrid(grid, folder, upOrin) {
+    console.log("Current Folder:", folder);
     grid.innerHTML = '';
     const shuffledImageOrder = shuffleArray(Array.from({ length: 25 }, (_, i) => i + 1));
     for (let i = 0; i < 25; i++) {
@@ -78,39 +66,24 @@ function createImageGrid(grid, folder,upOrin) {
         img.src = `images/${folder}/image/${shuffledImageOrder[i]}.jpg`;
         img.alt = `Image ${shuffledImageOrder[i]}`;
         img.classList.add('grid-item');
-        img.addEventListener('click', () => handleImageSelection(img, grid.id, folder,upOrin));
+        img.addEventListener('click', () => handleImageSelection(img, grid.id, folder, upOrin));
         grid.appendChild(img);
     }
 }
 
-const maxPasswordLength = 5;
-
-function handleImageSelection(img, gridId, folder,upOrin) {
+// Function to handle image selection
+function handleImageSelection(img, gridId, folder, upOrin) {
     const grid = document.getElementById(gridId);
     const maxPasswordLength = 5;
-    if(upOrin=="Up"){
-        selectedImagesUp.push(img.alt);
-        if (iteration < maxPasswordLength) {
-            iteration++;
-            createImageGrid(grid, `folder${iteration}`,upOrin);
-        } else {
-            console.log("images clicked", selectedImagesUp);
-            alert("done");
-            iteration=1;
-            
-        }
-    }
-    else{
-        selectedImagesIn.push(img.alt);
-        if (iteration < maxPasswordLength) {
-            iteration++;
-            createImageGrid(grid, `folder${iteration}`,upOrin);
-        } else {
-            console.log("images clicked", selectedImagesIn);
-            alert("done");
-            iteration=1;
-            
-        }
+    let selectedImages = upOrin === "Up" ? selectedImagesUp : selectedImagesIn;
+    selectedImages.push(img.alt);
+    if (iteration < maxPasswordLength) {
+        iteration++;
+        createImageGrid(grid, `folder${iteration}`, upOrin);
+    } else {
+        console.log("Images clicked", selectedImages);
+        alert("Done");
+        iteration = 1;
     }
 }
 
@@ -135,5 +108,5 @@ function shuffleArray(array) {
 }
 
 // Initialize grids with images from folder1
-createImageGrid(upGrid, 'folder1',"Up");
-createImageGrid(inGrid, 'folder1',"In");
+createImageGrid(upGrid, 'folder1', "Up");
+createImageGrid(inGrid, 'folder1', "In");
